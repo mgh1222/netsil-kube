@@ -2,7 +2,7 @@
 
 ## Netsil
 
-[Netsil](http://netsil.com/) discovers you application's topology based on its traffic; it analyzes traffic in a non-intrusive way and offers an insight into the exposed services.
+[Netsil](http://netsil.com/) discovers your application's topology based on its traffic; it analyzes traffic in a non-intrusive way and offers an insight into the exposed services.
 
 ## Install
 
