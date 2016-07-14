@@ -1,0 +1,51 @@
+apiVersion: extensions/v1beta1
+kind: DaemonSet
+metadata:
+  namespace: netsil
+  name: collector
+  labels:
+    app: netsil
+    component: collector
+spec:
+  template:
+    metadata:
+      labels:
+        app: netsil
+        component: collector
+    spec:
+      hostNetwork: true
+      containers:
+      - name: collector
+        image: netsil/collectors:stable-0.2.26
+        command: ["/bin/bash","-c","NETSIL_SP_HOST=$NETSIL_LITE_SERVICE_HOST /opt/netsil/collectors/start.sh all"]
+        env:
+        - name: NETSIL_SP_PORT
+          value: '2003'
+        - name: NETSIL_DD_PORT
+          value: '2001'
+        - name: TC_INTERFACE
+          value: any
+        - name: NODAEMON
+          value: 'true'
+        - name: API_KEY
+          value: netsil_api_key
+        volumeMounts:
+        - name: cgroup
+          mountPath: /host/sys/fs/cgroup/
+          readOnly: true
+        - name: proc
+          mountPath: /host/proc/
+          readOnly: true
+        - name: docker-sock
+          mountPath: /var/run/docker.sock
+          readOnly: true
+      volumes:
+      - name: cgroup
+        hostPath:
+          path: /sys/fs/cgroup/
+      - name: proc
+        hostPath:
+          path: /proc/
+      - name: docker-sock
+        hostPath:
+          path: /var/run/docker.sock

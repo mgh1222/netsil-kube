@@ -1,1 +1,45 @@
 # netsil-kube
+
+## Netsil
+
+[Netsil](http://netsil.com/) discovers you application's topology based on traffic.
+It analyzes traffic in a non-intrusive way, and offers an insight into the exposed services.
+
+## Install
+
+Requisites
+- Running kubernetes cluster
+- configured kubectl
+
+The installation process follows 4 simple steps
+
+* Create ```netsil``` namespace
+```
+$ kubectl create -f netsil-ns.yaml 
+namespace "netsil" created
+```
+* Create ```netsil-lite``` replication controller
+```
+$ kubectl create -f netsil-lite-rc.yaml 
+replicationcontroller "netsil-lite" created
+```
+* Create ```netsil-lite``` service
+At this point you might want to modify ```netsil-lite-svc.yaml``` to change the type of the service to ```LoadBalancer``` if you are using a cloud provider plugin that supports load balancers, or create an ```Ingress``` if you have an Ingress Controller.
+
+```
+$ kubectl create -f netsil-lite-svc.yaml 
+(possible warning to open ports)
+service "netsil-lite" created
+```
+
+* Create ```collector``` DaemonSet. This will create a Netsil collector agent in every node of the cluster.
+```
+$ kubectl create -f collector.yaml
+daemonset "collector" created
+```
+## Using netsil
+
+If you didn't edit ```netsil-lite``` service file, you will be able to reach Netsil web interface at any working node of the cluster, port 30443.
+
+All your external services will be monitored now using Netsil.
+

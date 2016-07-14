@@ -1,0 +1,72 @@
+apiVersion: v1
+kind: ReplicationController
+metadata:
+  namespace: netsil
+  name: netsil-lite
+spec:
+  replicas: 1
+  selector:
+    app: netsil
+    component: netsil-lite
+  template:
+    metadata:
+      name: stream-processor
+      labels:
+        app: netsil
+        component: netsil-lite
+        version: stable
+    spec:
+      containers:
+      - name: netsil-lite
+        image: netsil/netsil-lite:stable-0.2.26
+        command:
+        - /root/start.sh
+        - no-build
+        - netsil-lite
+        securityContext:
+          privileged: true
+        env:
+        - name: PRODUCT_FLAVOR
+          value: Lite
+        - name: DEPLOY_ENV
+          value: docker-compose
+        - name: NODEJS_ENV
+          value: NODE_ENV=production
+        - name: BUILD_ENV
+          value: production
+        - name: EVENT_TYPES
+          value: alert,comment,event,notification
+        - name: NETSIL_BUILD_BRANCH
+          value: stable
+        - name: NETSIL_VERSION_NUMBER
+          value: 0.2.26
+        ports:
+        - containerPort: 443
+        - containerPort: 2001
+        - containerPort: 2003
+        - containerPort: 2003
+          protocol: UDP
+        - containerPort: 5000
+        - containerPort: 8888
+        volumeMounts:
+        - name: root
+          mountPath: /outer_host
+        - name: log
+          mountPath: /var/log/netsil
+        - name: var-tmp
+          mountPath: /var/tmp
+        - name: tmp
+          mountPath: /tmp
+      volumes:
+      - name: root
+        hostPath:
+          path: /
+      - name: log
+        hostPath:
+          path: /var/log/netsil
+      - name: var-tmp
+        hostPath:
+          path: /var/tmp
+      - name: tmp
+        hostPath:
+          path: /tmp
