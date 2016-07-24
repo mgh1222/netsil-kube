@@ -18,10 +18,13 @@ spec:
     spec:
       containers:
       - name: netsil-lite
-        image: netsil/netsil-lite:stable-0.2.26
+        image: netsil/netsil-lite:stable-0.2.29
         command:
+        - /tini
+        - -g
+        - --
         - /root/start.sh
-        - no-build
+        - run
         - netsil-lite
         securityContext:
           privileged: true
@@ -34,20 +37,18 @@ spec:
           value: NODE_ENV=production
         - name: BUILD_ENV
           value: production
-        - name: EVENT_TYPES
-          value: alert,comment,event,notification
+        - name: VALID_INDEX_NAMES
+          value: events,notifications
         - name: NETSIL_BUILD_BRANCH
           value: stable
         - name: NETSIL_VERSION_NUMBER
-          value: 0.2.26
+          value: 0.2.29
         ports:
         - containerPort: 443
         - containerPort: 2001
         - containerPort: 2003
         - containerPort: 2003
           protocol: UDP
-        - containerPort: 5000
-        - containerPort: 8888
         volumeMounts:
         - name: root
           mountPath: /outer_host
@@ -55,8 +56,6 @@ spec:
           mountPath: /var/log/netsil
         - name: var-tmp
           mountPath: /var/tmp
-        - name: tmp
-          mountPath: /tmp
       volumes:
       - name: root
         hostPath:
@@ -67,6 +66,3 @@ spec:
       - name: var-tmp
         hostPath:
           path: /var/tmp
-      - name: tmp
-        hostPath:
-          path: /tmp

@@ -16,19 +16,15 @@ spec:
       hostNetwork: true
       containers:
       - name: collector
-        image: netsil/collectors:stable-0.2.26
+        image: netsil/collectors:stable-0.2.29
         command: ["/bin/bash","-c","NETSIL_SP_HOST=$NETSIL_LITE_SERVICE_HOST /opt/netsil/collectors/start.sh all"]
         env:
-        - name: NETSIL_SP_PORT
+        - name: NETSIL_TRAFFIC_PORT
           value: '2003'
-        - name: NETSIL_DD_PORT
+        - name: NETSIL_INFRA_PORT
           value: '2001'
-        - name: TC_INTERFACE
-          value: any
-        - name: NODAEMON
-          value: 'true'
-        - name: API_KEY
-          value: netsil_api_key
+        - name: DEPLOY_ENV
+          value: 'docker'
         volumeMounts:
         - name: cgroup
           mountPath: /host/sys/fs/cgroup/
