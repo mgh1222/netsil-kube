@@ -17,18 +17,18 @@ The installation process follows 4 simple steps
 $ kubectl create -f netsil-ns.yaml 
 namespace "netsil" created
 ```
-* Create ```netsil-lite``` replication controller
+* Create ```netsil``` replication controller
 ```
-$ kubectl create -f netsil-lite-rc.yaml 
-replicationcontroller "netsil-lite" created
+$ kubectl create -f netsil-rc.yaml 
+replicationcontroller "netsil" created
 ```
-* Create ```netsil-lite``` service
-At this point you might want to modify ```netsil-lite-svc.yaml``` to change the type of the service to ```LoadBalancer``` if you are using a cloud provider plugin that supports load balancers or create an ```Ingress``` if you have an Ingress Controller.
+* Create ```netsil``` service
+At this point you might want to modify ```netsil-svc.yaml``` to change the type of the service to ```LoadBalancer``` if you are using a cloud provider plugin that supports load balancers or create an ```Ingress``` if you have an Ingress Controller.
 
 ```
-$ kubectl create -f netsil-lite-svc.yaml 
+$ kubectl create -f netsil-svc.yaml 
 (possible warning to open ports)
-service "netsil-lite" created
+service "netsil" created
 ```
 
 * Create ```collector``` DaemonSet. This will create a Netsil collector agent in every node of the cluster.
@@ -38,7 +38,7 @@ daemonset "collector" created
 ```
 ## Using netsil
 
-If you didn't edit ```netsil-lite``` service file you will be able to reach the Netsil web interface at any working node of the cluster on port 30443.
+If you didn't edit ```netsil``` service file you will be able to reach the Netsil web interface at any working node of the cluster on port 30443.
 
 All your external services will be monitored now using Netsil.
 
