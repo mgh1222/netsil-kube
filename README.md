@@ -38,7 +38,10 @@ daemonset "collector" created
 ```
 ## Using netsil
 
-If you didn't edit ```netsil``` service file you will be able to reach the Netsil web interface at any working node of the cluster on port 30443.
+Unless you have modified the port settings in the service files above, these are the ports that should be opened to run Netsil:
+
+Incoming UDP ports: 2003
+Incoming TCP ports: 30443, 2001, 2003
 
 All your external services will be monitored now using Netsil.
 
