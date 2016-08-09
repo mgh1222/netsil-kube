@@ -16,8 +16,8 @@ spec:
       hostNetwork: true
       containers:
       - name: collector
-        image: netsil/collectors:stable-0.2.29
-        command: ["/bin/bash","-c","NETSIL_SP_HOST=$NETSIL_SERVICE_HOST /opt/netsil/collectors/start.sh all"]
+        image: netsil/collectors:stable-0.2.32
+        command: ["/bin/bash","-c","NETSIL_SP_HOST=$NETSIL_SERVICE_HOST /opt/netsil/collectors/start.sh"]
         env:
         - name: NETSIL_TRAFFIC_PORT
           value: '2003'
