@@ -38,6 +38,19 @@ service "netsil-lite" created
 $ kubectl create -f collector.yaml
 daemonset "collector" created
 ```
+
+## Host Network and Flannel
+
+If you are using Flannel as your network overlay it is possible you might run into the following issue: 
+
+https://github.com/kubernetes/kubernetes/issues/20391
+
+To work around this problem, you will want to run the following command on the host machines: 
+
+
+iptables -t nat -I POSTROUTING -o flannel.1 -s *host-private-ip* -j MASQUERADE
+
+
 ## Using netsil
 
 Unless you have modified the port settings in the service files above, these are the ports that should be opened to run Netsil:
@@ -47,3 +60,4 @@ Incoming TCP ports: 30443, 2001, 2003
 
 All your external services will be monitored now using Netsil.
 
+You can access Netsil by hitting your master public IP and appending *30443*. 
