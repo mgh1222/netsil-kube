@@ -4,6 +4,17 @@
 
 [Netsil](http://netsil.com/) discovers your application's topology based on its traffic; it analyzes traffic in a non-intrusive way and offers an insight into the exposed services.
 
+## Cluster Requisites
+
+You will want to create a cluster with sufficient resources to run Kubernetes along with Netsil. We recommend ensuring your master, instance size match up with the following minimum specs: 
+
+- 8 CPU
+- 32 GB Memory
+
+This matches a m3.2XLarge at AWS.
+
+Note, only your master needs to be running this spec. Your nodes can run at a smaller spec. 
+
 ## Install
 
 Requisites
