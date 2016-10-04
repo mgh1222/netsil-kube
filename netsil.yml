@@ -1,24 +1,29 @@
 apiVersion: v1
+kind: Namespace
+metadata:
+  name: netsil
+--------
+apiVersion: v1
 kind: ReplicationController
 metadata:
   namespace: netsil
-  name: netsil-lite
+  name: netsil
 spec:
   replicas: 1
   selector:
     app: netsil
-    component: netsil-lite
+    component: netsil
   template:
     metadata:
       name: stream-processor
       labels:
         app: netsil
-        component: netsil-lite
+        component: netsil
         version: stable
     spec:
       containers:
       - name: netsil-lite
-        image: netsil/netsil-lite:stable-1.0.0
+        image: netsil/netsil:stable-1.0.0
         command:
         - /root/startup.sh
         securityContext:
@@ -37,7 +42,7 @@ spec:
         - name: NETSIL_BUILD_BRANCH
           value: stable
         - name: NETSIL_VERSION_NUMBER
-          value: 0.2.33
+          value: 1.0.0
         ports:
         - containerPort: 443
         - containerPort: 2001
@@ -81,3 +86,78 @@ spec:
       - name: user-persistence
         hostPath:
           path: /opt/netsil/lite/user-persistence/data
+--------
+apiVersion: v1
+kind: Service
+metadata:
+  namespace: netsil
+  name: netsil
+spec:
+  selector:
+    app: netsil
+    component: netsil
+  ports:
+    - name: https
+      port: 443
+      nodePort: 30443
+    - name: port2001
+      port: 2001
+    - name: port2003
+      port: 2003
+    - name: port2003udp
+      port: 2003
+      protocol: UDP
+  type: NodePort
+--------
+apiVersion: extensions/v1beta1
+kind: DaemonSet
+metadata:
+  namespace: netsil
+  name: collector
+  labels:
+    app: netsil
+    component: collector
+spec:
+  template:
+    metadata:
+      labels:
+        app: netsil
+        component: collector
+    spec:
+      hostNetwork: true
+      containers:
+      - name: collector
+        image: netsil/collectors:stable-1.0.0
+        command: ["/bin/bash","-c","NETSIL_SP_HOST=$NETSIL_SERVICE_HOST /opt/netsil/collectors/start.sh"]
+        securityContext:
+          capabilities:
+            add:
+            - NET_RAW
+            - NET_ADMIN
+        env:
+        - name: NETSIL_TRAFFIC_PORT
+          value: '2003'
+        - name: NETSIL_INFRA_PORT
+          value: '2001'
+        - name: DEPLOY_ENV
+          value: 'docker'
+        volumeMounts:
+        - name: cgroup
+          mountPath: /host/sys/fs/cgroup/
+          readOnly: true
+        - name: proc
+          mountPath: /host/proc/
+          readOnly: true
+        - name: docker-sock
+          mountPath: /var/run/docker.sock
+          readOnly: true
+      volumes:
+      - name: cgroup
+        hostPath:
+          path: /sys/fs/cgroup/
+      - name: proc
+        hostPath:
+          path: /proc/
+      - name: docker-sock
+        hostPath:
+          path: /var/run/docker.sock
