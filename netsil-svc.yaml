@@ -8,6 +8,8 @@ spec:
     app: netsil
     component: netsil
   ports:
+    - name: http
+      port: 80
     - name: https
       port: 443
       nodePort: 30443
@@ -18,4 +20,6 @@ spec:
     - name: port2003udp
       port: 2003
       protocol: UDP
+    - name: port5005
+      port: 5005
   type: NodePort

@@ -22,8 +22,8 @@ spec:
         version: stable
     spec:
       containers:
-      - name: netsil-lite
-        image: netsil/netsil:stable-1.0.0
+      - name: netsil
+        image: netsil/netsil:stable-1.0.4
         command:
         - /root/startup.sh
         securityContext:
@@ -42,13 +42,15 @@ spec:
         - name: NETSIL_BUILD_BRANCH
           value: stable
         - name: NETSIL_VERSION_NUMBER
-          value: 1.0.0
+          value: 1.0.4
         ports:
+        - containerPort: 80
         - containerPort: 443
         - containerPort: 2001
         - containerPort: 2003
         - containerPort: 2003
           protocol: UDP
+        - containerPort: 5005
         volumeMounts:
         - name: root
           mountPath: /outer_host
@@ -64,6 +66,12 @@ spec:
           mountPath: /opt/netsil/alerts/data
         - name: user-persistence
           mountPath: /opt/netsil/user-persistence/data
+        - name: kafka-logs
+          mountPath: /opt/netsil/kafka/kafka-log-dir
+        - name: druid-realtime-segments
+          mountPath: /opt/netsil/druid/realtime-segments
+        - name: druid-localstorage
+          mountPath: /tmp/druid/localStorage
       volumes:
       - name: root
         hostPath:
@@ -86,6 +94,15 @@ spec:
       - name: user-persistence
         hostPath:
           path: /opt/netsil/lite/user-persistence/data
+      - name: kafka-logs
+        hostPath:
+          path: /opt/netsil/lite/kafka/kafka-log-dir
+      - name: druid-realtime-segments
+        hostPath:
+          path: /opt/netsil/lite/druid/realtime-segments
+      - name: druid-localstorage
+        hostPath:
+          path: /opt/netsil/lite/druid/localStorage
 --------
 apiVersion: v1
 kind: Service
@@ -97,6 +114,8 @@ spec:
     app: netsil
     component: netsil
   ports:
+    - name: http
+      port: 80
     - name: https
       port: 443
       nodePort: 30443
@@ -107,6 +126,8 @@ spec:
     - name: port2003udp
       port: 2003
       protocol: UDP
+    - name: port5005
+      port: 5005
   type: NodePort
 --------
 apiVersion: extensions/v1beta1
@@ -127,7 +148,7 @@ spec:
       hostNetwork: true
       containers:
       - name: collector
-        image: netsil/collectors:stable-1.0.0
+        image: netsil/collectors:stable-1.0.4
         command: ["/bin/bash","-c","NETSIL_SP_HOST=$NETSIL_SERVICE_HOST /opt/netsil/collectors/start.sh"]
         securityContext:
           capabilities:
