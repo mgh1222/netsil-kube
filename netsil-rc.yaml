@@ -24,20 +24,8 @@ spec:
         securityContext:
           privileged: true
         env:
-        - name: PRODUCT_FLAVOR
-          value: Lite
         - name: DEPLOY_ENV
           value: docker-compose
-        - name: NODEJS_ENV
-          value: NODE_ENV=production
-        - name: BUILD_ENV
-          value: production
-        - name: VALID_INDEX_NAMES
-          value: event,notification
-        - name: NETSIL_BUILD_BRANCH
-          value: stable
-        - name: NETSIL_VERSION_NUMBER
-          value: 1.0.4
         ports:
         - containerPort: 80
         - containerPort: 443
@@ -47,8 +35,6 @@ spec:
           protocol: UDP
         - containerPort: 5005
         volumeMounts:
-        - name: root
-          mountPath: /outer_host
         - name: log
           mountPath: /var/log/netsil
         - name: var-tmp
@@ -59,18 +45,19 @@ spec:
           mountPath: /usr/share/elasticsearch/data
         - name: alerts
           mountPath: /opt/netsil/alerts/data
-        - name: user-persistence
-          mountPath: /opt/netsil/user-persistence/data
+        - name: mysql
+          mountPath: /var/lib/mysql
         - name: kafka-logs
           mountPath: /opt/netsil/kafka/kafka-log-dir
         - name: druid-realtime-segments
           mountPath: /opt/netsil/druid/realtime-segments
         - name: druid-localstorage
           mountPath: /tmp/druid/localStorage
+        - name: zookeeper
+          mountPath: /opt/netsil/zookeeper/data
+        - name: user-persistence
+          mountPath: /opt/netsil/user-persistence/data
       volumes:
-      - name: root
-        hostPath:
-          path: /
       - name: log
         hostPath:
           path: /var/log/netsil
@@ -79,22 +66,28 @@ spec:
           path: /var/tmp
       - name: redis
         hostPath:
-          path: /opt/netsil/lite/redis
+          path: /home/netsil/lite/redis
       - name: elasticsearch
         hostPath:
-          path: /opt/netsil/lite/elasticsearch/data
+          path: /home/netsil/lite/elasticsearch/data
       - name: alerts
         hostPath:
-          path: /opt/netsil/lite/alerts/data
-      - name: user-persistence
+          path: /home/netsil/lite/alerts/data
+      - name: mysql
         hostPath:
-          path: /opt/netsil/lite/user-persistence/data
+          path: /home/netsil/lite/mysql/data
       - name: kafka-logs
         hostPath:
-          path: /opt/netsil/lite/kafka/kafka-log-dir
+          path: /home/netsil/lite/kafka/kafka-log-dir
       - name: druid-realtime-segments
         hostPath:
-          path: /opt/netsil/lite/druid/realtime-segments
+          path: /home/netsil/lite/druid/realtime-segments
       - name: druid-localstorage
         hostPath:
-          path: /opt/netsil/lite/druid/localStorage
+          path: /home/netsil/lite/druid/localStorage
+      - name: zookeeper
+        hostPath:
+          path: /home/netsil/lite/zookeeper/data
+      - name: user-persistence
+        hostPath:
+          path: /home/netsil/lite/user-persistence/data
