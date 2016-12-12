@@ -23,14 +23,11 @@ spec:
     spec:
       containers:
       - name: netsil
-        image: netsil/netsil:stable-1.0.6
+        image: netsil/netsil:stable-1.0.7
         command:
         - /root/startup.sh
         securityContext:
           privileged: true
-        env:
-        - name: DEPLOY_ENV
-          value: docker-compose
         ports:
         - containerPort: 80
         - containerPort: 443
@@ -141,7 +138,7 @@ spec:
       hostNetwork: true
       containers:
       - name: collector
-        image: netsil/collectors:stable-1.0.6
+        image: netsil/collectors:stable-1.0.7
         command: ["/bin/bash","-c","NETSIL_SP_HOST=$NETSIL_SERVICE_HOST /opt/netsil/collectors/start.sh"]
         securityContext:
           capabilities:
