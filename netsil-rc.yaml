@@ -21,8 +21,6 @@ spec:
         image: netsil/netsil:stable-1.0.7
         command:
         - /root/startup.sh
-        securityContext:
-          privileged: true
         ports:
         - containerPort: 80
         - containerPort: 443
