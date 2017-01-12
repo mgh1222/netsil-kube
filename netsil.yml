@@ -69,9 +69,6 @@ spec:
       - name: alerts
         hostPath:
           path: /opt/netsil/lite/alerts/data
-      - name: druid-localstorage
-        hostPath:
-          path: /opt/netsil/lite/druid/localStorage
       - name: druid-realtime-segments
         hostPath:
           path: /opt/netsil/lite/druid/realtime-segments
