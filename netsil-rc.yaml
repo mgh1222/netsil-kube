@@ -40,6 +40,8 @@ spec:
           mountPath: /etc/ceph
         - name: ceph-data
           mountPath: /var/lib/ceph-data
+        - name: druid-index-cache
+          mountPath: /var/tmp/druid/indexCache
         - name: druid-realtime-segments
           mountPath: /opt/netsil/druid/realtime-segments
         - name: elasticsearch
@@ -57,12 +59,6 @@ spec:
         - name: zookeeper
           mountPath: /opt/netsil/zookeeper/data
       volumes:
-      - name: log
-        hostPath:
-          path: /var/log/netsil
-      - name: var-tmp
-        hostPath:
-          path: /var/tmp
       - name: alerts
         hostPath:
           path: /opt/netsil/lite/alerts/data
@@ -72,6 +68,9 @@ spec:
       - name: ceph-data
         hostPath:
           path: /opt/netsil/lite/ceph/data
+      - name: druid-index-cache
+        hostPath:
+          path: /var/tmp/druid/indexCache
       - name: druid-realtime-segments
         hostPath:
           path: /opt/netsil/lite/druid/realtime-segments
