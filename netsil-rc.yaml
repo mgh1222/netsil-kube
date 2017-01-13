@@ -36,12 +36,18 @@ spec:
           mountPath: /var/tmp
         - name: alerts
           mountPath: /opt/netsil/alerts/data
+        - name: ceph-conf
+          mountPath: /etc/ceph
+        - name: ceph-data
+          mountPath: /var/lib/ceph-data
         - name: druid-realtime-segments
           mountPath: /opt/netsil/druid/realtime-segments
         - name: elasticsearch
           mountPath: /usr/share/elasticsearch/data
         - name: kafka-logs
           mountPath: /opt/netsil/kafka/kafka-log-dir
+        - name: licenses
+          mountPath: /opt/netsil/lite/license-manager/licenses
         - name: mysql
           mountPath: /var/lib/mysql
         - name: redis
@@ -50,10 +56,6 @@ spec:
           mountPath: /opt/netsil/user-persistence/data
         - name: zookeeper
           mountPath: /opt/netsil/zookeeper/data
-        - name: ceph-data
-          mountPath: /var/lib/ceph-data
-        - name: ceph-conf
-          mountPath: /etc/ceph
       volumes:
       - name: log
         hostPath:
@@ -64,12 +66,21 @@ spec:
       - name: alerts
         hostPath:
           path: /opt/netsil/lite/alerts/data
+      - name: ceph-conf
+        hostPath:
+          path: /opt/netsil/lite/ceph/conf
+      - name: ceph-data
+        hostPath:
+          path: /opt/netsil/lite/ceph/data
       - name: druid-realtime-segments
         hostPath:
           path: /opt/netsil/lite/druid/realtime-segments
       - name: elasticsearch
         hostPath:
           path: /opt/netsil/lite/elasticsearch/data
+      - name: licenses
+        hostPath:
+          path: /opt/netsil/lite/license-manager/licenses
       - name: kafka-logs
         hostPath:
           path: /opt/netsil/lite/kafka/kafka-log-dir
@@ -85,9 +96,3 @@ spec:
       - name: zookeeper
         hostPath:
           path: /opt/netsil/lite/zookeeper/data
-      - name: ceph-data
-        hostPath:
-          path: /opt/netsil/lite/ceph/data
-      - name: ceph-conf
-        hostPath:
-          path: /opt/netsil/lite/ceph/conf
