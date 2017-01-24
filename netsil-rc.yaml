@@ -18,7 +18,7 @@ spec:
     spec:
       containers:
       - name: netsil
-        image: netsil/netsil:stable-1.0.7
+        image: netsil/netsil:stable-1.0.8
         command:
         - /root/startup.sh
         ports:
@@ -30,10 +30,6 @@ spec:
           protocol: UDP
         - containerPort: 5005
         volumeMounts:
-        - name: log
-          mountPath: /var/log/netsil
-        - name: var-tmp
-          mountPath: /var/tmp
         - name: alerts
           mountPath: /opt/netsil/alerts/data
         - name: ceph-conf
