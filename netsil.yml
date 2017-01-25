@@ -23,7 +23,7 @@ spec:
     spec:
       containers:
       - name: netsil
-        image: netsil/netsil:stable-1.0.7
+        image: netsil/netsil:stable-1.0.8
         command:
         - /root/startup.sh
         ports:
@@ -35,20 +35,22 @@ spec:
           protocol: UDP
         - containerPort: 5005
         volumeMounts:
-        - name: log
-          mountPath: /var/log/netsil
-        - name: var-tmp
-          mountPath: /var/tmp
         - name: alerts
           mountPath: /opt/netsil/alerts/data
-        - name: druid-localstorage
-          mountPath: /tmp/druid/localStorage
+        - name: ceph-conf
+          mountPath: /etc/ceph
+        - name: ceph-data
+          mountPath: /var/lib/ceph-data
+        - name: druid-index-cache
+          mountPath: /var/tmp/druid/indexCache
         - name: druid-realtime-segments
           mountPath: /opt/netsil/druid/realtime-segments
         - name: elasticsearch
           mountPath: /usr/share/elasticsearch/data
         - name: kafka-logs
           mountPath: /opt/netsil/kafka/kafka-log-dir
+        - name: licenses
+          mountPath: /opt/netsil/lite/license-manager/licenses
         - name: mysql
           mountPath: /var/lib/mysql
         - name: redis
@@ -58,24 +60,27 @@ spec:
         - name: zookeeper
           mountPath: /opt/netsil/zookeeper/data
       volumes:
-      - name: log
-        hostPath:
-          path: /var/log/netsil
-      - name: var-tmp
-        hostPath:
-          path: /var/tmp
       - name: alerts
         hostPath:
           path: /opt/netsil/lite/alerts/data
-      - name: druid-localstorage
+      - name: ceph-conf
         hostPath:
-          path: /opt/netsil/lite/druid/localStorage
+          path: /opt/netsil/lite/ceph/conf
+      - name: ceph-data
+        hostPath:
+          path: /opt/netsil/lite/ceph/data
+      - name: druid-index-cache
+        hostPath:
+          path: /var/tmp/druid/indexCache
       - name: druid-realtime-segments
         hostPath:
           path: /opt/netsil/lite/druid/realtime-segments
       - name: elasticsearch
         hostPath:
           path: /opt/netsil/lite/elasticsearch/data
+      - name: licenses
+        hostPath:
+          path: /opt/netsil/lite/license-manager/licenses
       - name: kafka-logs
         hostPath:
           path: /opt/netsil/lite/kafka/kafka-log-dir
@@ -136,7 +141,7 @@ spec:
       hostNetwork: true
       containers:
       - name: collector
-        image: netsil/collectors:stable-1.0.7
+        image: netsil/collectors:stable-1.0.8
         command: ["/bin/bash","-c","NETSIL_SP_HOST=$NETSIL_SERVICE_HOST /opt/netsil/collectors/start.sh"]
         securityContext:
           capabilities:
